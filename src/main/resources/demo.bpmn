@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_00s5goj" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.11.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
+  <bpmn:process id="demo" name="demo" isExecutable="true">
+    <bpmn:serviceTask id="process_test_step1" name="get rule">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Accept">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://localhost:8081/v1/service/receive_req</camunda:inputParameter>
+            <camunda:outputParameter name="code">${S(response).prop("code")}</camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1obszv7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wio17o</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1obszv7" sourceRef="start_test1" targetRef="process_test_step1" />
+    <bpmn:startEvent id="start_test1" name="start">
+      <bpmn:extensionElements />
+      <bpmn:outgoing>Flow_1obszv7</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_12312" name="check rule">
+      <bpmn:incoming>Flow_0wio17o</bpmn:incoming>
+      <bpmn:outgoing>Flow_0dh6z0k</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1y8oehl</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0wio17o" sourceRef="process_test_step1" targetRef="ExclusiveGateway_12312" />
+    <bpmn:sequenceFlow id="Flow_0dh6z0k" name="case A" sourceRef="ExclusiveGateway_12312" targetRef="Activity_1dj2pjf">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="code" value="${code}" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${code == '"1"'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="end2" name="end">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="javascript">print("All process done code = " + code)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0i1jxl7</bpmn:incoming>
+      <bpmn:incoming>Flow_1d3m12t</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1y8oehl" name="case B" sourceRef="ExclusiveGateway_12312" targetRef="Activity_1td1f8n">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${code == '"0"'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="Activity_1dj2pjf" name="process rule A">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Accept">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://localhost:8081/v1/service/apply_rule</camunda:inputParameter>
+            <camunda:inputParameter name="payload">
+              <camunda:script scriptFormat="javascript">var code1 = execution.getVariable("code");
+'{"rule":"'+ code1 +'"}'</camunda:script>
+            </camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0dh6z0k</bpmn:incoming>
+      <bpmn:outgoing>Flow_0i1jxl7</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0i1jxl7" sourceRef="Activity_1dj2pjf" targetRef="end2" />
+    <bpmn:serviceTask id="Activity_1td1f8n" name="process rule B">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Accept">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://localhost:8081/v1/service/apply_rule</camunda:inputParameter>
+            <camunda:inputParameter name="payload">
+              <camunda:script scriptFormat="javascript">var code1 = execution.getVariable("code");
+'{"rule":"'+ code1 +'"}'</camunda:script>
+            </camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1y8oehl</bpmn:incoming>
+      <bpmn:outgoing>Flow_1d3m12t</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1d3m12t" sourceRef="Activity_1td1f8n" targetRef="end2" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="test_camunda1">
+      <bpmndi:BPMNShape id="Activity_0m7hlhl_di" bpmnElement="process_test_step1">
+        <dc:Bounds x="360" y="170" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="start_test1">
+        <dc:Bounds x="179" y="192" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="187" y="235" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0vq9pa2_di" bpmnElement="ExclusiveGateway_12312" isMarkerVisible="true">
+        <dc:Bounds x="605" y="185" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="664.5" y="203" width="51" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_02m42k2" bpmnElement="end2">
+        <dc:Bounds x="868" y="192" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="838.5" y="203" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1dj2pjf_di" bpmnElement="Activity_1dj2pjf">
+        <dc:Bounds x="690" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1wqvrrb" bpmnElement="Activity_1td1f8n">
+        <dc:Bounds x="690" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1obszv7_di" bpmnElement="Flow_1obszv7">
+        <di:waypoint x="215" y="210" />
+        <di:waypoint x="360" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wio17o_di" bpmnElement="Flow_0wio17o">
+        <di:waypoint x="460" y="210" />
+        <di:waypoint x="605" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dh6z0k_di" bpmnElement="Flow_0dh6z0k">
+        <di:waypoint x="630" y="185" />
+        <di:waypoint x="630" y="120" />
+        <di:waypoint x="690" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="643" y="102" width="34" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1y8oehl_di" bpmnElement="Flow_1y8oehl">
+        <di:waypoint x="630" y="235" />
+        <di:waypoint x="630" y="310" />
+        <di:waypoint x="690" y="310" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="629" y="313" width="34" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0i1jxl7_di" bpmnElement="Flow_0i1jxl7">
+        <di:waypoint x="790" y="120" />
+        <di:waypoint x="886" y="120" />
+        <di:waypoint x="886" y="192" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1d3m12t_di" bpmnElement="Flow_1d3m12t">
+        <di:waypoint x="790" y="310" />
+        <di:waypoint x="886" y="310" />
+        <di:waypoint x="886" y="228" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
