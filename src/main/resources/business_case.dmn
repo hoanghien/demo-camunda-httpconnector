@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" id="Definitions_1b5r2ay" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.11.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
+  <decision id="Decision_1lla6a9" name="business case">
+    <decisionTable id="DecisionTable_0tnjs1p" hitPolicy="FIRST">
+      <input id="Input_1" label="code" biodi:width="192">
+        <inputExpression id="InputExpression_1" typeRef="string" expressionLanguage="feel">
+          <text>code</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0qvn5k6">
+        <inputExpression id="LiteralExpression_1axuo0p" typeRef="integer">
+          <text>score</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="code1" name="code1" typeRef="string" />
+      <rule id="DecisionRule_1aikyal">
+        <inputEntry id="UnaryTests_124c5u1">
+          <text>not("B", "C")</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_130828t">
+          <text>&gt;= 100</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0i4qd98">
+          <text>"A1"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1gd23kt">
+        <inputEntry id="UnaryTests_10i52up">
+          <text>not("B", "C")</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0k21r4a">
+          <text>&lt; 100</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_08dcsny">
+          <text>"C1"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0u4p03h">
+        <inputEntry id="UnaryTests_0x021um">
+          <text>"B"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_07qnvs9">
+          <text>&gt; 100</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_150rnhg">
+          <text>"B1"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_03l553i">
+        <inputEntry id="UnaryTests_0fskvtv">
+          <text>"B"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0vrnnqq">
+          <text>&lt;= 100</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_160cs76">
+          <text>"D1"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="Decision_1lla6a9">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
