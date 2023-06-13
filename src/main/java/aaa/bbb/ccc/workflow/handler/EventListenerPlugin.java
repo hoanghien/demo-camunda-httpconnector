@@ -13,14 +13,14 @@ import java.util.ArrayList;
  * to get automatically registered in the Spring Boot environment.
  */
 @Component
-public class SendEventListenerPlugin extends AbstractProcessEnginePlugin {
+public class EventListenerPlugin extends AbstractProcessEnginePlugin {
 
 	@Override
 	public void preInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
 		if (processEngineConfiguration.getCustomPostBPMNParseListeners() == null) {
 			processEngineConfiguration.setCustomPostBPMNParseListeners(new ArrayList<BpmnParseListener>());
 		}
-		processEngineConfiguration.getCustomPostBPMNParseListeners().add(new AddSendEventListenerToBpmnParseListener());
+		processEngineConfiguration.getCustomPostBPMNParseListeners().add(new EventBpmnParseListener());
 
 	}
 
